@@ -1,63 +1,57 @@
-<expression> ::= <identifier>
-               | <integer_literal>
-               | <bool_literal>
-               | <char_literal>
-               | <string_literal>
-               | <array_literal>
-               | <expression><operator><expression>
+<expr> ::= <ident>
+         | <primitive_lit>
+         | <array_lit>
+         | <expr><op><expr>
 
 <type> ::= <primitive> | <array_type>
 
-// 12
-<array_size> ::= <signless_non_zero_integer>
-
 // [12]i32
-<array_type> ::= [<array_size>]<type>
+<array_type> ::= [<int_lit>]<type>
 
 // 1, 2, 3
-<array_literal_content> ::= <expression>
-                          | <expression>, <array_literal_content>
+<array_lit_content> ::= <expr>
+                      | <expr>, <array_lit_content>
 
 // [1, 2, 3, 4]
 // [1, 2, 3, 4,] <- Trailing commas are allowed
-<array_literal> ::= [<array_literal_content>]
-                  | [<array_literal_content>,]
+<array_lit> ::= [<array_lit_content>]
+              | [<array_lit_content>,]
 
 // name: str = "John";
-<declaration_explicit> ::= <identifier>: <type> = <expression>;
+<decl_explicit> ::= <ident>: <type> = <expr>;
 
 // name := "John"; <- variable type is inferred from the assigned expression
-<declaration_inferred> ::= <identifier> := <expression>;
+<decl_inferred> ::= <ident> := <expr>;
 
-<declaration> ::= <declaration_explicit> | <declaration_inferred>
+<decl> ::= <decl_explicit> | <decl_inferred>
 
 // a = 10 + 10;
-<assignment> ::= <identifier> = <expression>;
+<assign> ::= <ident> = <expr>;
 
 // read(a);
-<read> ::= read(<identifier>);
+<read> ::= read(<ident>);
 
 // write(100);
-<write> ::= write(<expression>);
+<write> ::= write(<expr>);
 
 // if condition { write("yes"); }
 // if condition { write("yes"); } else { write("no"); }
-<if> ::= if <expression> { <statement_list> }
-       | if <expression> { <statement_list> } else { <statement_list> }
+<if> ::= if <expr> { <stmt_list> }
+       | if <expr> { <stmt_list> } else { <stmt_list> }
        
 // while condition { write("looping"); }
-<while> ::= while <expression> { <statement_list> }
+<while> ::= while <expr> { <stmt_list> }
 
-<statement> ::= <declaration> 
-              | <assignment>
-              | <read>
-              | <write>
-              | <if>
-              | <while>
+<stmt> ::= <decl> 
+         | <assign>
+         | <read>
+         | <write>
+         | <if>
+         | <while>
 
-<statement_list> ::= "" (nothing) 
-                   | <statement>
-                   | <statement><statement_list>
+<stmt_list> ::= (nothing) 
+              | <stmt>
+              | <stmt><stmt_list>
 
 // a := 0;
 // read(a);
@@ -68,4 +62,4 @@
 // }
 // 
 // write("Finished");
-<program> ::= <statement_list>
+<program> ::= <stmt_list>

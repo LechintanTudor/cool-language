@@ -2,42 +2,44 @@
 // Alphabet
 ////////////////////////////////////////////////////////////////////////////////
 
-1) Single characters
 <letter> ::= a | b | ... | z | A | B | ... | Z 
 
 <non_zero_digit> ::= 1 | 2 | ... | 9
 
 <digit> ::= 0 | <non_zero_digit>
 
-2) Identifiers
-<identifier_start> ::= <letter> | _
+////////////////////////////////////////////////////////////////////////////////
+// Identifiers
+////////////////////////////////////////////////////////////////////////////////
 
-<identifier_char> ::= <letter> | <digit> | _
+<ident_start> ::= <letter> | _
 
-<identifier_char_seq> ::= <identifier_char>
-                        | <identifier_char><identifier_char_seq>
+<ident_char> ::= <letter> | <digit> | _
+
+<ident_char_seq> ::= <ident_char>
+                   | <ident_char><ident_char_seq>
 
 // c
 // counter
-<identifier> ::= <letter>
-               | <identifier_start><identifier_char_seq>
+<ident> ::= <letter>
+          | <ident_start><ident_char_seq>
                
 ////////////////////////////////////////////////////////////////////////////////
 // Operators
 ////////////////////////////////////////////////////////////////////////////////
                
-<arithmetic_operator> ::= + | - | * | / | %
+<arithmetic_op> ::= + | - | * | / | %
 
-<relational_operator> ::= == | != | < | <= | > | >=
+<relational_op> ::= == | != | < | <= | > | >=
 
-<logical_operator> ::= && | "||" | !
+<logical_op> ::= && | "||" | !
 
-<bitwise_operator> ::= & | "|" | ^
+<bitwise_op> ::= & | "|" | ^
 
-<operator> ::= <arithmetic_operator>
-             | <relational_operator>
-             | <logical_operator>
-             | <bitwise_operator>
+<op> ::= <arithmetic_op>
+       | <relational_op>
+       | <logical_op>
+       | <bitwise_op>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Separators
@@ -70,32 +72,33 @@
 // Constants
 ////////////////////////////////////////////////////////////////////////////////
 
-1) Integers
 <sign> ::= + | -
 
 <digit_seq> ::= <digit>
               | <digit><digit_seq>
               
-<signless_non_zero_integer> ::= <non_zero_digit>
-                             | <non_zero_digit><digit_seq>
+<signless_non_zero_int> ::= <non_zero_digit>
+                          | <non_zero_digit><digit_seq>
 
 // 0
 // 100
 // -100
-<integer_literal> ::= 0
-           | <signless_non_zero_integer>
-           | <sign><signless_non_zero_integer>
+<int_lit> ::= 0
+            | <signless_non_zero_int>
+            | <sign><signless_non_zero_int>
 
-2) Booleans
-<bool_literal> ::= true | false
+<bool_lit> ::= true | false
            
-3) Characters
-<char_literal> ::= '<letter>' | '<digit>'
+<char_lit> ::= '<letter>' | '<digit>'
 
-4) Strings
-<string_char> ::= <letter> | <digit> | <whitespace> | _
+<str_char> ::= <letter> | <digit> | <whitespace> | _
 
-<string_content> ::= <string_char>
-                   | <string_char><string_content>
+<str_content> ::= <str_char>
+                | <str_char><str_content>
 
-<string_literal> ::= "" | "<string_content>"
+<str_lit> ::= "" | "<str_content>"
+
+<primitive_lit> ::= <int_lit>
+                  | <bool_lit>
+                  | <char_lit>
+                  | <str_lit>
