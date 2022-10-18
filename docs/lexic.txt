@@ -2,12 +2,14 @@
 // Alphabet
 ////////////////////////////////////////////////////////////////////////////////
 
+1) Single characters
 <letter> ::= a | b | ... | z | A | B | ... | Z 
 
 <non_zero_digit> ::= 1 | 2 | ... | 9
 
 <digit> ::= 0 | <non_zero_digit>
 
+2) Identifiers
 <identifier_start> ::= <letter> | _
 
 <identifier_char> ::= <letter> | <digit> | _
@@ -15,6 +17,8 @@
 <identifier_char_seq> ::= <identifier_char>
                         | <identifier_char><identifier_char_seq>
 
+// c
+// counter
 <identifier> ::= <letter>
                | <identifier_start><identifier_char_seq>
                
@@ -48,7 +52,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 <primitive> ::= i32
+              | bool
               | char
+              | str
 
 <reserved_word> ::= mut
                   | if
@@ -56,27 +62,40 @@
                   | for
                   | in
                   | while
+                  | true
+                  | false
                   | <primitive>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constants
 ////////////////////////////////////////////////////////////////////////////////
 
+1) Integers
 <sign> ::= + | -
 
 <digit_seq> ::= <digit>
               | <digit><digit_seq>
               
-<signless_non_zero_number> ::= <non_zero_digit>
+<signless_non_zero_integer> ::= <non_zero_digit>
                              | <non_zero_digit><digit_seq>
 
-<number> ::= 0
-           | <signless_non_zero_number>
-           | <sign><signless_non_zero_number>
+// 0
+// 100
+// -100
+<integer_literal> ::= 0
+           | <signless_non_zero_integer>
+           | <sign><signless_non_zero_integer>
 
+2) Booleans
+<bool_literal> ::= true | false
+           
+3) Characters
+<char_literal> ::= '<letter>' | '<digit>'
+
+4) Strings
 <string_char> ::= <letter> | <digit> | <whitespace> | _
 
 <string_content> ::= <string_char>
                    | <string_char><string_content>
 
-<string> ::= "" | "<string_content>"
+<string_literal> ::= "" | "<string_content>"
