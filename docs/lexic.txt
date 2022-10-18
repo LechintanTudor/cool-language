@@ -1,0 +1,82 @@
+////////////////////////////////////////////////////////////////////////////////
+// Alphabet
+////////////////////////////////////////////////////////////////////////////////
+
+<letter> ::= a | b | ... | z | A | B | ... | Z 
+
+<non_zero_digit> ::= 1 | 2 | ... | 9
+
+<digit> ::= 0 | <non_zero_digit>
+
+<identifier_start> ::= <letter> | _
+
+<identifier_char> ::= <letter> | <digit> | _
+
+<identifier_char_seq> ::= <identifier_char>
+                        | <identifier_char><identifier_char_seq>
+
+<identifier> ::= <letter>
+               | <identifier_start><identifier_char_seq>
+               
+////////////////////////////////////////////////////////////////////////////////
+// Operators
+////////////////////////////////////////////////////////////////////////////////
+               
+<arithmetic_operator> ::= + | - | * | / | %
+
+<relational_operator> ::= == | != | < | <= | > | >=
+
+<logical_operator> ::= && | "||"
+
+<bitwise_operator> ::= & | "|" | ^
+
+<operator> ::= <arithmetic_operator>
+             | <relational_operator>
+             | <logical_operator>
+             | <bitwise_operator>
+
+////////////////////////////////////////////////////////////////////////////////
+// Separators
+////////////////////////////////////////////////////////////////////////////////
+
+<whitespace> ::= <space> | <tab> | <newline> 
+
+<separator> ::= ; | , | ( | ) | [ | ] | { | } | <whitespace>
+
+////////////////////////////////////////////////////////////////////////////////
+// Reserved words
+////////////////////////////////////////////////////////////////////////////////
+
+<primitive> ::= i32
+              | char
+
+<reserved_word> ::= mut
+                  | if
+                  | else
+                  | for
+                  | in
+                  | while
+                  | <primitive>
+
+////////////////////////////////////////////////////////////////////////////////
+// Constants
+////////////////////////////////////////////////////////////////////////////////
+
+<sign> ::= + | -
+
+<digit_seq> ::= <digit>
+              | <digit><digit_seq>
+              
+<signless_non_zero_number> ::= <non_zero_digit>
+                             | <non_zero_digit><digit_seq>
+
+<number> ::= 0
+           | <signless_non_zero_number>
+           | <sign><signless_non_zero_number>
+
+<string_char> ::= <letter> | <digit> | <whitespace> | _
+
+<string_content> ::= <string_char>
+                   | <string_char><string_content>
+
+<string> ::= "" | "<string_content>"
