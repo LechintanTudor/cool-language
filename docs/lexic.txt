@@ -1,0 +1,104 @@
+////////////////////////////////////////////////////////////////////////////////
+// Alphabet
+////////////////////////////////////////////////////////////////////////////////
+
+<letter> ::= a | b | ... | z | A | B | ... | Z 
+
+<non_zero_digit> ::= 1 | 2 | ... | 9
+
+<digit> ::= 0 | <non_zero_digit>
+
+////////////////////////////////////////////////////////////////////////////////
+// Identifiers
+////////////////////////////////////////////////////////////////////////////////
+
+<ident_start> ::= <letter> | _
+
+<ident_char> ::= <letter> | <digit> | _
+
+<ident_char_seq> ::= <ident_char>
+                   | <ident_char><ident_char_seq>
+
+// c
+// counter
+<ident> ::= <letter>
+          | <ident_start><ident_char_seq>
+               
+////////////////////////////////////////////////////////////////////////////////
+// Operators
+////////////////////////////////////////////////////////////////////////////////
+               
+<arithmetic_op> ::= + | - | * | / | %
+
+<relational_op> ::= == | != | < | <= | > | >=
+
+<logical_op> ::= && | "||" | !
+
+<bitwise_op> ::= & | "|" | ^
+
+<op> ::= <arithmetic_op>
+       | <relational_op>
+       | <logical_op>
+       | <bitwise_op>
+
+////////////////////////////////////////////////////////////////////////////////
+// Separators
+////////////////////////////////////////////////////////////////////////////////
+
+<whitespace> ::= <space> | <tab> | <newline> 
+
+<separator> ::= ; | , | ( | ) | [ | ] | { | } | <whitespace>
+
+////////////////////////////////////////////////////////////////////////////////
+// Reserved words
+////////////////////////////////////////////////////////////////////////////////
+
+<primitive> ::= i32
+              | bool
+              | char
+              | str
+
+<reserved_word> ::= mut
+                  | if
+                  | else
+                  | for
+                  | in
+                  | while
+                  | true
+                  | false
+                  | <primitive>
+
+////////////////////////////////////////////////////////////////////////////////
+// Constants
+////////////////////////////////////////////////////////////////////////////////
+
+<sign> ::= + | -
+
+<digit_seq> ::= <digit>
+              | <digit><digit_seq>
+              
+<signless_non_zero_int> ::= <non_zero_digit>
+                          | <non_zero_digit><digit_seq>
+
+// 0
+// 100
+// -100
+<int_lit> ::= 0
+            | <signless_non_zero_int>
+            | <sign><signless_non_zero_int>
+
+<bool_lit> ::= true | false
+           
+<char_lit> ::= '<letter>' | '<digit>'
+
+<str_char> ::= <letter> | <digit> | <whitespace> | _
+
+<str_content> ::= <str_char>
+                | <str_char><str_content>
+
+<str_lit> ::= "" | "<str_content>"
+
+<primitive_lit> ::= <int_lit>
+                  | <bool_lit>
+                  | <char_lit>
+                  | <str_lit>
