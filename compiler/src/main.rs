@@ -1,7 +1,12 @@
-mod symbol;
-#[allow(dead_code)]
+#![allow(dead_code)]
 
+/// Constans and identifiers that may be saved in a [SymbolTable](crate::SymbolTable).
+mod symbol;
+
+/// Symbol table for storing constans and identifiers.
 mod symbol_table;
+
+/// Various utility functions.
 mod utils;
 
 use crate::symbol::{Const, Symbol};

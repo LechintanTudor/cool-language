@@ -1,7 +1,9 @@
-pub fn hash_string(value: &str) -> u64 {
+/// Hashes the given string.
+pub fn hash_str(value: &str) -> u64 {
     value.chars().fold(7_u64, |hash, c| hash.wrapping_mul(31).wrapping_add(u64::from(c)))
 }
 
+/// Returns whether `n` is prime.
 pub fn is_prime(n: usize) -> bool {
     if n <= 1 {
         return false;
@@ -24,6 +26,7 @@ pub fn is_prime(n: usize) -> bool {
     }
 }
 
+/// Returns the next prime number greater than or equal to `n`.
 pub fn next_prime(n: usize) -> usize {
     for i in n..usize::MAX {
         if is_prime(i) {
