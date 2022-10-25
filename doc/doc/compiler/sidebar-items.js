@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":[["main",""]],"mod":[["symbol","Constans and identifiers that may be saved in a SymbolTable."],["symbol_table","Symbol table for storing constans and identifiers."],["utils","Various utility functions."]]};
