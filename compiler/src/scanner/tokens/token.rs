@@ -1,11 +1,17 @@
-use crate::scanner::{Literal, Operator, ReservedWord, Separator};
+use crate::scanner::{Operator, ReservedWord, Separator};
 
+/// Token defined by the "cool language" specification.
 #[derive(Clone, Debug)]
 pub enum Token {
+    /// Separator.
     Separator(Separator),
+    /// Operator.
     Operator(Operator),
+    /// Reserved word.
     ReservedWord(ReservedWord),
-    Literal(Literal),
+    /// Literal.
+    Literal(usize),
+    /// Identifier.
     Ident(usize),
 }
 
@@ -24,11 +30,5 @@ impl From<Operator> for Token {
 impl From<ReservedWord> for Token {
     fn from(reserved_word: ReservedWord) -> Self {
         Self::ReservedWord(reserved_word)
-    }
-}
-
-impl From<Literal> for Token {
-    fn from(literal: Literal) -> Self {
-        Self::Literal(literal)
     }
 }

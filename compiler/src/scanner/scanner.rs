@@ -1,6 +1,4 @@
-use crate::scanner::{
-    LexicalError, Literal, LiteralKind, Operator, ReservedWord, Separator, Token,
-};
+use crate::scanner::{LexicalError, Operator, ReservedWord, Separator, Token};
 use crate::symbols::{Const, Symbol, SymbolTable};
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -11,7 +9,7 @@ lazy_static! {
     static ref NUMBER_LITERAL_REGEX: Regex = Regex::new(r"(^0$)|(^([1-9][0-9]*)$)").unwrap();
 
     /// Matches string literals.
-    static ref STRING_LITERAL_REGEX: Regex = Regex::new(r#"^"([_a-zA-Z0-9]*)"$"#).unwrap();
+    static ref STR_LITERAL_REGEX: Regex = Regex::new(r#"^"([_a-zA-Z0-9]*)"$"#).unwrap();
 
     /// Matches character literals.
     static ref CHAR_LITERAL_REGEX: Regex = Regex::new(r"'([_a-zA-Z0-9])'").unwrap();
@@ -20,14 +18,19 @@ lazy_static! {
     static ref IDENT_REGEX: Regex = Regex::new(r"(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)").unwrap();
 }
 
+/// Source file split into its tokens, identifiers and constants.
 #[derive(Default, Debug)]
 pub struct Program {
+    /// List containing all tokens that make up the source file.
     pub tokens: Vec<Token>,
+    /// Symbol table containing all identifiers.
     pub idents: SymbolTable,
+    /// Symbol table containing all constants.
     pub consts: SymbolTable,
 }
 
 impl Program {
+    /// Creates a new program from the given source code.
     pub fn from_source(source: &str) -> Result<Program, LexicalError> {
         let mut program = Program::default();
         let mut grapheme_iter = source.graphemes(true).peekable();
@@ -46,20 +49,19 @@ impl Program {
                 if NUMBER_LITERAL_REGEX.is_match(word) {
                     let number = parse_i32(word);
                     let number_id = program.consts.insert(Const::I32(number).into());
-                    program.tokens.push(Literal::new(number_id, LiteralKind::I32).into());
-                } else if let Some(string_literal) =
-                    STRING_LITERAL_REGEX.captures(word).and_then(|c| c.get(1))
+                    program.tokens.push(Token::Literal(number_id));
+                } else if let Some(str_literal) =
+                    STR_LITERAL_REGEX.captures(word).and_then(|c| c.get(1))
                 {
-                    let string_literal = string_literal.as_str().to_string();
-                    let string_literal_id =
-                        program.consts.insert(Const::String(string_literal).into());
-                    program.tokens.push(Literal::new(string_literal_id, LiteralKind::Str).into());
+                    let str_literal = str_literal.as_str().to_string();
+                    let str_literal_id = program.consts.insert(Const::Str(str_literal).into());
+                    program.tokens.push(Token::Literal(str_literal_id));
                 } else if let Some(char_literal) =
                     CHAR_LITERAL_REGEX.captures(word).and_then(|c| c.get(1))
                 {
                     let char_literal = char_literal.as_str().chars().next().unwrap_or('\0');
                     let char_literal_id = program.consts.insert(Const::Char(char_literal).into());
-                    program.tokens.push(Literal::new(char_literal_id, LiteralKind::Char).into());
+                    program.tokens.push(Token::Literal(char_literal_id));
                 } else if IDENT_REGEX.is_match(word) {
                     let ident_id = program.idents.insert(Symbol::Ident(word.clone()));
                     program.tokens.push(Token::Ident(ident_id));
@@ -109,6 +111,7 @@ impl Program {
     }
 }
 
+/// Parses the `input` into a 32-bit signed integer.
 pub fn parse_i32(input: &str) -> i32 {
     let mut accumulator = 0;
 

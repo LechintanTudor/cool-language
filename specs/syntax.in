@@ -28,12 +28,6 @@
 // a = 10 + 10;
 <assign> ::= <ident> = <expr>;
 
-// read(a);
-<read> ::= read(<ident>);
-
-// write(100);
-<write> ::= write(<expr>);
-
 // if condition { write("yes"); }
 // if condition { write("yes"); } else { write("no"); }
 <if> ::= if <expr> { <stmt_list> }
@@ -44,8 +38,6 @@
 
 <stmt> ::= <decl> 
          | <assign>
-         | <read>
-         | <write>
          | <if>
          | <while>
 

@@ -1,6 +1,6 @@
 use crate::utils;
 
-/// Constant that can be stored in a [SymbolTable](crate::SymbolTable).
+/// Constant that can be stored in a symbol table.
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub enum Const {
     /// 32-bit integer constant.
@@ -10,7 +10,7 @@ pub enum Const {
     /// Boolean constant.
     Bool(bool),
     /// String constant.
-    String(String),
+    Str(String),
 }
 
 impl Const {
@@ -20,12 +20,12 @@ impl Const {
             Self::I32(value) => u64::from_ne_bytes(i64::from(*value).to_ne_bytes()),
             Self::Char(value) => u64::from(*value),
             Self::Bool(value) => u64::from(*value),
-            Self::String(value) => utils::hash_str(value),
+            Self::Str(value) => utils::hash_str(value),
         }
     }
 }
 
-/// Identifier or constant that can be stored in a [SymbolTable](crate::SymbolTable).
+/// Identifier or constant that can be stored in a symbol table.
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub enum Symbol {
     /// Identifier.

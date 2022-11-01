@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["BoolLiteral","Boolean literal defined by the “cool language” specification."],["ControlFlow","Control flow word defined by the “cool language” specification."],["Primitive","Primitive type defined by the “cool language” specification."],["ReservedWord","Reserved words defined by the “cool language” specification."]]};

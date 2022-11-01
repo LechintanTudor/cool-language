@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["LexicalError","Error returned by the scanner when it cannot categorize a token."]]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["main",""]],"mod":[["symbol","Constans and identifiers that may be saved in a SymbolTable."],["symbol_table","Symbol table for storing constans and identifiers."],["utils","Various utility functions."]]};
+window.SIDEBAR_ITEMS = {"fn":[["main",""]],"mod":[["output","Pretty-print the tokens and symbol tables of a program."],["scanner","Scanner for splitting source files into tokens."],["symbols","Symbols and symbol table for storing constans and identifiers."],["utils","Various utility functions."]]};

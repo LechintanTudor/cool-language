@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Token","Token defined by the “cool language” specification."]]};

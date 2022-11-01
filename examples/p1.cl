@@ -1,11 +1,11 @@
-write("Input a number:");
+write("Input_a_number");
 n: i32 = read();
 
-write("Started countdown");
+write("Started_countdown");
 
 while n > 0 {
     write(n);
     n -= 1;
 }
 
-write("Countdown finished");
+write("Countdown_finished");

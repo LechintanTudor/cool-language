@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Separator","Separator defined by the “cool language” specification."]]};

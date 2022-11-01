@@ -12,10 +12,6 @@ while
 true
 false
 
-// IO
-read
-write
-
 // Primitives
 i32
 bool

@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["compiler"];
+window.ALL_CRATES = ["aho_corasick","compiler","lazy_static","memchr","regex","regex_syntax","unicode_segmentation"];

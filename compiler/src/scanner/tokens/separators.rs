@@ -31,7 +31,7 @@ impl Separator {
                 ";" => Self::Semicolon,
                 ":" => Self::Colon,
                 "(" => Self::OpenParanthesis,
-                "" => Self::ClosedParanthesis,
+                ")" => Self::ClosedParanthesis,
                 "[" => Self::OpenSquareBracket,
                 "]" => Self::ClosedSquareBracket,
                 "{" => Self::OpenBracket,

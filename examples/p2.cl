@@ -1,10 +1,10 @@
-write("Input a number:");
+write("Input_a_number");
 n: int = read();
 
 if n < 0 {
-    write("Number is negative");
+    write("Number_is_negative");
 } else if n == 0 {
-    write("Number is zero");
+    write("Number_is_zero");
 } else {
-    write("Number is positive");
+    write("Number_is_positive");
 }

@@ -3,6 +3,7 @@ use crate::symbols::SymbolTable;
 
 use std::fmt::Write;
 
+/// Pretty prints a symbol table.
 pub fn output_symbol_table(symbols: &SymbolTable) -> String {
     let mut output = String::default();
 
@@ -13,6 +14,7 @@ pub fn output_symbol_table(symbols: &SymbolTable) -> String {
     output
 }
 
+/// Pretty prints a list of tokens.
 pub fn output_tokens(tokens: &[Token]) -> String {
     let mut output = String::default();
 
