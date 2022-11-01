@@ -1,4 +1,4 @@
-use crate::scanner::{Literal, ReservedWord, Separator, Token};
+use crate::scanner::{Literal, LiteralKind, ReservedWord, Separator, Token};
 use crate::symbols::{Const, Symbol, SymbolTable};
 use regex::Regex;
 use unicode_segmentation::UnicodeSegmentation;
@@ -42,7 +42,10 @@ impl Program {
                                     let number = parse_i32(&word);
                                     let number_id =
                                         consts.insert(Symbol::Const(Const::I32(number)));
-                                    tokens.push(Token::Literal(Literal::I32(number_id)));
+                                    tokens.push(Token::Literal(Literal::new(
+                                        number_id,
+                                        LiteralKind::I32,
+                                    )));
                                 } else if ident_regex.is_match(&word) {
                                     let ident_id = idents.insert(Symbol::Ident(word.to_string()));
                                     tokens.push(Token::Ident(ident_id));

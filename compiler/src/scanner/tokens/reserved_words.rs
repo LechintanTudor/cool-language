@@ -1,61 +1,16 @@
-#[derive(Clone, Debug)]
-pub enum Token {
-    Separator(Separator),
-    ReservedWord(ReservedWord),
-    Literal(Literal),
-    Ident(usize),
-}
-
-#[derive(Clone, PartialEq, Eq, Debug)]
-pub enum Separator {
-    Whitespace,
-    Semicolon,
-    Colon,
-    OpenParanthesis,
-    ClosedParanthesis,
-    OpenSquareBracket,
-    ClosedSquareBracket,
-    OpenBracket,
-    ClosedBracket,
-    SingleQuote,
-    DoubleQuote,
-}
-
-impl Separator {
-    pub fn try_parse(input: &str) -> Option<Self> {
-        if input.trim().is_empty() {
-            Some(Self::Whitespace)
-        } else {
-            Some(match input {
-                ";" => Self::Semicolon,
-                ":" => Self::Colon,
-                "(" => Self::OpenParanthesis,
-                "" => Self::ClosedParanthesis,
-                "[" => Self::OpenSquareBracket,
-                "]" => Self::ClosedSquareBracket,
-                "{" => Self::OpenBracket,
-                "}" => Self::ClosedBracket,
-                "'" => Self::SingleQuote,
-                "\"" => Self::DoubleQuote,
-                _ => return None,
-            })
-        }
-    }
-
-    #[inline]
-    pub fn is_whitespace(&self) -> bool {
-        matches!(self, Self::Whitespace)
-    }
-}
-
-#[derive(Clone, Debug)]
+/// Reserved words defined by the "cool language" specification.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ReservedWord {
+    /// Primitive types.
     Primitive(Primitive),
+    /// Control flow.
     ControlFlow(ControlFlow),
+    /// `true` and `false`.
     BoolLiteral(BoolLiteral),
 }
 
 impl ReservedWord {
+    /// Tries to parse the `input` into a reserved word.
     pub fn try_parse(input: &str) -> Option<Self> {
         if let Some(primitive) = Primitive::try_parse(input) {
             return Some(Self::Primitive(primitive));
@@ -73,36 +28,49 @@ impl ReservedWord {
     }
 }
 
-#[derive(Clone, Debug)]
+/// Primitive type defined by the "cool language" specification.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Primitive {
+    /// `i32`.
     I32,
+    /// `bool`.
     Bool,
+    /// `char`.
     Char,
-    String,
+    /// `str`.
+    Str,
 }
 
 impl Primitive {
+    /// Tries to parse the `input` into a primitive.
     pub fn try_parse(input: &str) -> Option<Self> {
         Some(match input {
             "i32" => Self::I32,
             "bool" => Self::Bool,
             "char" => Self::Char,
-            "str" => Self::String,
+            "str" => Self::Str,
             _ => return None,
         })
     }
 }
 
-#[derive(Clone, Debug)]
+/// Control flow word defined by the "cool language" specification.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ControlFlow {
+    /// `if`.
     If,
+    /// `else`.
     Else,
+    /// `for`.
     For,
+    /// `in`.
     In,
+    /// `while`.
     While,
 }
 
 impl ControlFlow {
+    /// Tries to parse the `input` into a control flow word.
     pub fn try_parse(input: &str) -> Option<Self> {
         Some(match input {
             "if" => Self::If,
@@ -115,13 +83,17 @@ impl ControlFlow {
     }
 }
 
-#[derive(Clone, Debug)]
+/// Boolean literal defined by the "cool language" specification.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum BoolLiteral {
+    /// `true`.
     True,
+    /// `false`.
     False,
 }
 
 impl BoolLiteral {
+    /// Tries to parse the `input` into a boolean literal.
     pub fn try_parse(input: &str) -> Option<Self> {
         Some(match input {
             "true" => Self::True,
@@ -129,11 +101,4 @@ impl BoolLiteral {
             _ => return None,
         })
     }
-}
-
-#[derive(Clone, Debug)]
-pub enum Literal {
-    I32(usize),
-    Char(usize),
-    String(usize),
 }
