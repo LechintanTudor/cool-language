@@ -22,6 +22,10 @@ bool
 char
 str
 
+// Assignment operators
+=
+:=
+
 // Arithmetic operators
 +
 -
@@ -57,3 +61,4 @@ str
 ]
 {
 }
+"

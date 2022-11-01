@@ -1,4 +1,4 @@
-use crate::symbol::Symbol;
+use crate::symbols::Symbol;
 use crate::utils;
 use std::fmt;
 use std::iter::Flatten;
@@ -146,7 +146,7 @@ impl<'a> Iterator for SymbolTableIter<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::symbol::Const;
+    use crate::symbols::Const;
 
     #[test]
     fn test_symbol_table() {

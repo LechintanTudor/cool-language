@@ -1,20 +1,17 @@
 #![allow(dead_code)]
 
-/// Constans and identifiers that may be saved in a [SymbolTable](crate::SymbolTable).
-mod symbol;
+mod scanner;
 
-/// Symbol table for storing constans and identifiers.
-mod symbol_table;
+/// Symbols and symbol table for storing constans and identifiers.
+mod symbols;
 
 /// Various utility functions.
 mod utils;
 
-use crate::symbol::{Const, Symbol};
-use crate::symbol_table::SymbolTable;
+use crate::scanner::Program;
 
 fn main() {
-    let mut symbol_table = SymbolTable::default();
-    symbol_table.insert(Symbol::Ident("counter".to_string()));
-    symbol_table.insert(Symbol::Const(Const::I32(100)));
-    println!("{:#?}", symbol_table);
+    let program = std::fs::read_to_string("programs/p1.cl").unwrap();
+    let program = Program::from_str(&program);
+    println!("{:#?}", program);
 }
