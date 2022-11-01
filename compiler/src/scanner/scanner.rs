@@ -1,4 +1,6 @@
-use crate::scanner::{Literal, LiteralKind, Operator, ReservedWord, Separator, Token};
+use crate::scanner::{
+    LexicalError, Literal, LiteralKind, Operator, ReservedWord, Separator, Token,
+};
 use crate::symbols::{Const, Symbol, SymbolTable};
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -20,13 +22,18 @@ pub struct Program {
 }
 
 impl Program {
-    pub fn from_source(source: &str) -> Program {
+    pub fn from_source(source: &str) -> Result<Program, LexicalError> {
         let mut program = Program::default();
         let mut grapheme_iter = source.graphemes(true).peekable();
+        let mut line = 1_usize;
         let mut word = String::new();
         let mut operator_string = String::new();
 
-        fn consume_word(program: &mut Program, word: &mut String) {
+        fn consume_word(
+            program: &mut Program,
+            word: &mut String,
+            line: usize,
+        ) -> Result<(), LexicalError> {
             if let Some(reserved_word) = ReservedWord::try_parse(word) {
                 program.tokens.push(reserved_word.into());
             } else if !word.is_empty() {
@@ -38,22 +45,23 @@ impl Program {
                     let ident_id = program.idents.insert(Symbol::Ident(word.clone()));
                     program.tokens.push(Token::Ident(ident_id));
                 } else {
-                    panic!("Lexical error: {}", word);
+                    return Err(LexicalError::new(format!("Failed to parse \"{}\"", word), line));
                 }
-
-                word.clear();
             }
+
+            word.clear();
+            Ok(())
         }
 
         while let Some(grapheme) = grapheme_iter.next() {
             if let Some(separator) = Separator::try_parse(grapheme) {
-                consume_word(&mut program, &mut word);
+                consume_word(&mut program, &mut word, line)?;
 
                 if !separator.is_whitespace() {
                     program.tokens.push(separator.into());
                 }
             } else if let Some(operator) = Operator::try_parse(grapheme) {
-                consume_word(&mut program, &mut word);
+                consume_word(&mut program, &mut word, line)?;
 
                 if operator.needs_lookahead() {
                     operator_string.clear();
@@ -72,9 +80,13 @@ impl Program {
             } else {
                 word.push_str(grapheme);
             }
+
+            if grapheme == "\n" {
+                line += 1;
+            }
         }
 
-        program
+        Ok(program)
     }
 }
 

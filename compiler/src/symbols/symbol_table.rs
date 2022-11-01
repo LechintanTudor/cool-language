@@ -78,6 +78,13 @@ impl SymbolTable {
         SymbolTableIter(self.values.iter().flatten())
     }
 
+    /// Returns the symbol table as a sorted vector.
+    pub fn to_sorted_vec(&self) -> Vec<(&Symbol, usize)> {
+        let mut symbols = self.iter().map(|(symbol, id)| (symbol, *id)).collect::<Vec<_>>();
+        symbols.sort_by_key(|(_, id)| *id);
+        symbols
+    }
+
     /// Returns the number of symbols in the table.
     #[inline]
     pub fn len(&self) -> usize {
