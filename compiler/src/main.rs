@@ -12,6 +12,6 @@ use crate::scanner::Program;
 
 fn main() {
     let program = std::fs::read_to_string("programs/p1.cl").unwrap();
-    let program = Program::from_str(&program);
+    let program = Program::from_source(&program);
     println!("{:#?}", program);
 }

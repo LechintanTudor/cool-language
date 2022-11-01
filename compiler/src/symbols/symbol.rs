@@ -43,3 +43,9 @@ impl Symbol {
         }
     }
 }
+
+impl From<Const> for Symbol {
+    fn from(c: Const) -> Self {
+        Self::Const(c)
+    }
+}
