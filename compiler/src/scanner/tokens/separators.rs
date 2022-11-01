@@ -19,10 +19,6 @@ pub enum Separator {
     OpenBracket,
     /// }
     ClosedBracket,
-    /// '
-    SingleQuote,
-    /// "
-    DoubleQuote,
 }
 
 impl Separator {
@@ -40,8 +36,6 @@ impl Separator {
                 "]" => Self::ClosedSquareBracket,
                 "{" => Self::OpenBracket,
                 "}" => Self::ClosedBracket,
-                "'" => Self::SingleQuote,
-                "\"" => Self::DoubleQuote,
                 _ => return None,
             })
         }

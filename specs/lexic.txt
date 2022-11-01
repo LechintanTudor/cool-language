@@ -91,7 +91,7 @@
            
 <char_lit> ::= '<letter>' | '<digit>'
 
-<str_char> ::= <letter> | <digit> | <whitespace> | _
+<str_char> ::= <letter> | <digit> | _
 
 <str_content> ::= <str_char>
                 | <str_char><str_content>

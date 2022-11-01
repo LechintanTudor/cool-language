@@ -8,7 +8,13 @@ use unicode_segmentation::UnicodeSegmentation;
 
 lazy_static! {
     /// Matches zero and non-zero signless numbers.
-    static ref SIGNLESS_NUMBER_REGEX: Regex = Regex::new(r"(^0$)|(^([1-9][0-9]*)$)").unwrap();
+    static ref NUMBER_LITERAL_REGEX: Regex = Regex::new(r"(^0$)|(^([1-9][0-9]*)$)").unwrap();
+
+    /// Matches string literals.
+    static ref STRING_LITERAL_REGEX: Regex = Regex::new(r#"^"([_a-zA-Z0-9]*)"$"#).unwrap();
+
+    /// Matches character literals.
+    static ref CHAR_LITERAL_REGEX: Regex = Regex::new(r"'([_a-zA-Z0-9])'").unwrap();
 
     /// Matches identifiers that start with underscores or ascii letters.
     static ref IDENT_REGEX: Regex = Regex::new(r"(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)").unwrap();
@@ -37,10 +43,23 @@ impl Program {
             if let Some(reserved_word) = ReservedWord::try_parse(word) {
                 program.tokens.push(reserved_word.into());
             } else if !word.is_empty() {
-                if SIGNLESS_NUMBER_REGEX.is_match(word) {
+                if NUMBER_LITERAL_REGEX.is_match(word) {
                     let number = parse_i32(word);
                     let number_id = program.consts.insert(Const::I32(number).into());
                     program.tokens.push(Literal::new(number_id, LiteralKind::I32).into());
+                } else if let Some(string_literal) =
+                    STRING_LITERAL_REGEX.captures(word).and_then(|c| c.get(1))
+                {
+                    let string_literal = string_literal.as_str().to_string();
+                    let string_literal_id =
+                        program.consts.insert(Const::String(string_literal).into());
+                    program.tokens.push(Literal::new(string_literal_id, LiteralKind::Str).into());
+                } else if let Some(char_literal) =
+                    CHAR_LITERAL_REGEX.captures(word).and_then(|c| c.get(1))
+                {
+                    let char_literal = char_literal.as_str().chars().next().unwrap_or('\0');
+                    let char_literal_id = program.consts.insert(Const::Char(char_literal).into());
+                    program.tokens.push(Literal::new(char_literal_id, LiteralKind::Char).into());
                 } else if IDENT_REGEX.is_match(word) {
                     let ident_id = program.idents.insert(Symbol::Ident(word.clone()));
                     program.tokens.push(Token::Ident(ident_id));
