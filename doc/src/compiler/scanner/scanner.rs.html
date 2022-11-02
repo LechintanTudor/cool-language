@@ -140,6 +140,24 @@
 <span id="140">140</span>
 <span id="141">141</span>
 <span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::scanner</span>::{<span class="ident">LexicalError</span>, <span class="ident">Operator</span>, <span class="ident">ReservedWord</span>, <span class="ident">Separator</span>, <span class="ident">Token</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::symbols</span>::{<span class="ident">Const</span>, <span class="ident">Symbol</span>, <span class="ident">SymbolTable</span>};
 <span class="kw">use</span> <span class="ident">lazy_static::lazy_static</span>;
@@ -154,7 +172,7 @@
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">STR_LITERAL_REGEX</span>: <span class="ident">Regex</span> <span class="op">=</span> <span class="ident">Regex::new</span>(<span class="string">r#&quot;^&quot;([_a-zA-Z0-9]*)&quot;$&quot;#</span>).<span class="ident">unwrap</span>();
 
     <span class="doccomment">/// Matches character literals.</span>
-    <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">CHAR_LITERAL_REGEX</span>: <span class="ident">Regex</span> <span class="op">=</span> <span class="ident">Regex::new</span>(<span class="string">r&quot;&#39;([_a-zA-Z0-9])&#39;&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">CHAR_LITERAL_REGEX</span>: <span class="ident">Regex</span> <span class="op">=</span> <span class="ident">Regex::new</span>(<span class="string">r&quot;^&#39;([_a-zA-Z0-9])&#39;$&quot;</span>).<span class="ident">unwrap</span>();
 
     <span class="doccomment">/// Matches identifiers that start with underscores or ascii letters.</span>
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IDENT_REGEX</span>: <span class="ident">Regex</span> <span class="op">=</span> <span class="ident">Regex::new</span>(<span class="string">r&quot;(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)&quot;</span>).<span class="ident">unwrap</span>();
@@ -164,11 +182,11 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Program</span> {
     <span class="doccomment">/// List containing all tokens that make up the source file.</span>
-    <span class="kw">pub</span> <span class="ident">tokens</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span>,
+    <span class="ident">tokens</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span>,
     <span class="doccomment">/// Symbol table containing all identifiers.</span>
-    <span class="kw">pub</span> <span class="ident">idents</span>: <span class="ident">SymbolTable</span>,
+    <span class="ident">idents</span>: <span class="ident">SymbolTable</span>,
     <span class="doccomment">/// Symbol table containing all constants.</span>
-    <span class="kw">pub</span> <span class="ident">consts</span>: <span class="ident">SymbolTable</span>,
+    <span class="ident">consts</span>: <span class="ident">SymbolTable</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Program</span> {
@@ -250,6 +268,24 @@
         }
 
         <span class="prelude-val">Ok</span>(<span class="ident">program</span>)
+    }
+
+    <span class="doccomment">/// Returns a slice of all the tokens that make up the source file.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Token</span>] {
+        <span class="self">self</span>.<span class="ident">tokens</span>.<span class="ident">as_slice</span>()
+    }
+
+    <span class="doccomment">/// Returns the symbol table containing all identifiers from the source file.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">idents</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">SymbolTable</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">idents</span>
+    }
+
+    <span class="doccomment">/// Returns the symbo table containing all constants from the source file.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">consts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">SymbolTable</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">consts</span>
     }
 }
 
