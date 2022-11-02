@@ -46,9 +46,6 @@
 <span id="46">46</span>
 <span id="47">47</span>
 <span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils</span>;
 
 <span class="doccomment">/// Constant that can be stored in a symbol table.</span>
@@ -58,8 +55,6 @@
     <span class="ident">I32</span>(<span class="ident">i32</span>),
     <span class="doccomment">/// Unicode scalar constant.</span>
     <span class="ident">Char</span>(<span class="ident">char</span>),
-    <span class="doccomment">/// Boolean constant.</span>
-    <span class="ident">Bool</span>(<span class="ident">bool</span>),
     <span class="doccomment">/// String constant.</span>
     <span class="ident">Str</span>(<span class="ident">String</span>),
 }
@@ -70,7 +65,6 @@
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident"><span class="self">Self</span>::I32</span>(<span class="ident">value</span>) =&gt; <span class="ident">u64::from_ne_bytes</span>(<span class="ident">i64::from</span>(<span class="kw-2">*</span><span class="ident">value</span>).<span class="ident">to_ne_bytes</span>()),
             <span class="ident"><span class="self">Self</span>::Char</span>(<span class="ident">value</span>) =&gt; <span class="ident">u64::from</span>(<span class="kw-2">*</span><span class="ident">value</span>),
-            <span class="ident"><span class="self">Self</span>::Bool</span>(<span class="ident">value</span>) =&gt; <span class="ident">u64::from</span>(<span class="kw-2">*</span><span class="ident">value</span>),
             <span class="ident"><span class="self">Self</span>::Str</span>(<span class="ident">value</span>) =&gt; <span class="ident">utils::hash_str</span>(<span class="ident">value</span>),
         }
     }

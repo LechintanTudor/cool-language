@@ -7,8 +7,6 @@ pub enum Const {
     I32(i32),
     /// Unicode scalar constant.
     Char(char),
-    /// Boolean constant.
-    Bool(bool),
     /// String constant.
     Str(String),
 }
@@ -19,7 +17,6 @@ impl Const {
         match self {
             Self::I32(value) => u64::from_ne_bytes(i64::from(*value).to_ne_bytes()),
             Self::Char(value) => u64::from(*value),
-            Self::Bool(value) => u64::from(*value),
             Self::Str(value) => utils::hash_str(value),
         }
     }
