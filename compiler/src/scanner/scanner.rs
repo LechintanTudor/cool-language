@@ -12,7 +12,7 @@ lazy_static! {
     static ref STR_LITERAL_REGEX: Regex = Regex::new(r#"^"([_a-zA-Z0-9]*)"$"#).unwrap();
 
     /// Matches character literals.
-    static ref CHAR_LITERAL_REGEX: Regex = Regex::new(r"'([_a-zA-Z0-9])'").unwrap();
+    static ref CHAR_LITERAL_REGEX: Regex = Regex::new(r"^'([_a-zA-Z0-9])'$").unwrap();
 
     /// Matches identifiers that start with underscores or ascii letters.
     static ref IDENT_REGEX: Regex = Regex::new(r"(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)").unwrap();
