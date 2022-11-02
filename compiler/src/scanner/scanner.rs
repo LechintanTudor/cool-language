@@ -22,11 +22,11 @@ lazy_static! {
 #[derive(Default, Debug)]
 pub struct Program {
     /// List containing all tokens that make up the source file.
-    pub tokens: Vec<Token>,
+    tokens: Vec<Token>,
     /// Symbol table containing all identifiers.
-    pub idents: SymbolTable,
+    idents: SymbolTable,
     /// Symbol table containing all constants.
-    pub consts: SymbolTable,
+    consts: SymbolTable,
 }
 
 impl Program {
@@ -108,6 +108,24 @@ impl Program {
         }
 
         Ok(program)
+    }
+
+    /// Returns a slice of all the tokens that make up the source file.
+    #[inline]
+    pub fn tokens(&self) -> &[Token] {
+        self.tokens.as_slice()
+    }
+
+    /// Returns the symbol table containing all identifiers from the source file.
+    #[inline]
+    pub fn idents(&self) -> &SymbolTable {
+        &self.idents
+    }
+
+    /// Returns the symbo table containing all constants from the source file.
+    #[inline]
+    pub fn consts(&self) -> &SymbolTable {
+        &self.consts
     }
 }
 

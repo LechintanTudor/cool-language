@@ -39,7 +39,7 @@ fn main() {
         }
     };
 
-    println!("[Identifiers]\n{}\n", output::output_symbol_table(&program.idents));
-    println!("[Constants]\n{}\n", output::output_symbol_table(&program.consts));
-    println!("[Tokens]\n{}\n", output::output_tokens(&program.tokens));
+    println!("[Identifiers]\n{}\n", output::output_symbol_table(program.idents()));
+    println!("[Constants]\n{}\n", output::output_symbol_table(program.consts()));
+    println!("[Tokens]\n{}\n", output::output_tokens(program.tokens()));
 }
