@@ -12,6 +12,8 @@ mod symbols;
 /// Various utility functions.
 mod utils;
 
+mod state_machine;
+
 use crate::scanner::Program;
 
 fn main() {
