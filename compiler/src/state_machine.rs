@@ -2,93 +2,112 @@ use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::fmt;
+use std::sync::Arc;
 
-#[derive(Clone, Copy, Debug)]
-pub struct StateIndex(pub usize);
+type State = String;
+type Symbol = String;
+type StateArc = Arc<State>;
+type SymbolArc = Arc<String>;
 
-#[derive(Clone, Copy, Debug)]
-pub struct SymbolIndex(pub usize);
-
-#[derive(Clone, Debug)]
-pub struct State {
-    pub name: String,
-    pub transitions: Vec<Trans>,
-}
-
-#[derive(Clone, Debug)]
-pub struct Trans {
-    pub symbol: SymbolIndex,
-    pub dst_state: StateIndex,
-}
-
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(try_from = "SerializedStateMachine")]
 pub struct StateMachine {
-    states: Vec<State>,
-    alphabet: Vec<String>,
-    initial_state: StateIndex,
-    final_state: StateIndex,
+    states: HashSet<StateArc>,
+    alphabet: HashSet<SymbolArc>,
+    transitions: HashMap<State, HashMap<String, StateArc>>,
+    initial_state: StateArc,
+    final_state: StateArc,
+}
+
+impl StateMachine {
+    pub fn is_accepted<S>(&self, sequence: &[S]) -> bool
+    where
+        S: AsRef<str>,
+    {
+        let mut state: &str = &self.initial_state;
+
+        for symbol in sequence.iter().map(|symbol| symbol.as_ref()) {
+            let next_state = self
+                .transitions
+                .get(state)
+                .and_then(|transitions| transitions.get(symbol))
+                .map(|state| state.as_str());
+
+            match next_state {
+                Some(next_state) => state = next_state,
+                None => return false,
+            }
+        }
+
+        state == self.final_state.as_str()
+    }
+
+    pub fn iter_states(&self) -> impl Iterator<Item = &str> {
+        self.states.iter().map(|state| state.as_str())
+    }
+
+    pub fn iter_symbols(&self) -> impl Iterator<Item = &str> {
+        self.alphabet.iter().map(|state| state.as_str())
+    }
+
+    pub fn iter_transitions(&self) -> impl Iterator<Item = (&str, &str, &str)> {
+        self.transitions.iter().flat_map(|(src_state, transitions)| {
+            transitions.iter().map(|(symbol, dst_state)| {
+                (src_state.as_str(), symbol.as_str(), dst_state.as_str())
+            })
+        })
+    }
+
+    pub fn initial_state(&self) -> &str {
+        self.initial_state.as_str()
+    }
+
+    pub fn final_state(&self) -> &str {
+        self.final_state.as_str()
+    }
 }
 
 impl TryFrom<SerializedStateMachine> for StateMachine {
     type Error = StateMachineDeserError;
 
     fn try_from(mut machine: SerializedStateMachine) -> Result<Self, Self::Error> {
-        let mut state_indexes = HashMap::<String, usize>::new();
-        let mut alphabet_indexes = HashMap::<String, usize>::new();
+        let states = machine.states.drain().map(Arc::new).collect::<HashSet<_>>();
 
-        let mut states = machine
-            .states
-            .drain()
-            .inspect(|name| {
-                state_indexes.insert(name.to_string(), state_indexes.len());
-            })
-            .map(|name| State { name, transitions: Vec::new() })
-            .collect::<Vec<_>>();
+        let symbols = machine.alphabet.drain().map(Arc::new).collect::<HashSet<_>>();
 
-        let alphabet = machine
-            .alphabet
-            .drain()
-            .inspect(|symbol| {
-                alphabet_indexes.insert(symbol.to_string(), state_indexes.len());
-            })
-            .collect::<Vec<_>>();
+        let mut transitions = HashMap::<State, HashMap<Symbol, StateArc>>::new();
 
-        for trans in machine.transitions.drain() {
-            let src_state = state_indexes
-                .get(&trans.src_state)
-                .copied()
-                .map(StateIndex)
-                .ok_or_else(|| StateMachineDeserError::InvalidState(trans.src_state))?;
+        for transition in machine.transitions.drain() {
+            let src_state = states
+                .get(&transition.src_state)
+                .ok_or_else(|| StateMachineDeserError::InvalidState(transition.src_state))?;
 
-            let symbol = state_indexes
-                .get(&trans.symbol)
-                .copied()
-                .map(SymbolIndex)
-                .ok_or_else(|| StateMachineDeserError::InvalidSymbol(trans.symbol))?;
+            let symbol = symbols
+                .get(&transition.symbol)
+                .ok_or_else(|| StateMachineDeserError::InvalidSymbol(transition.symbol))?;
 
-            let dst_state = state_indexes
-                .get(&trans.dst_state)
-                .copied()
-                .map(StateIndex)
-                .ok_or_else(|| StateMachineDeserError::InvalidState(trans.dst_state))?;
+            let dst_state = states
+                .get(&transition.dst_state)
+                .cloned()
+                .ok_or_else(|| StateMachineDeserError::InvalidState(transition.dst_state))?;
 
-            states[src_state.0].transitions.push(Trans { symbol, dst_state });
+            transitions
+                .entry(src_state.as_str().to_owned())
+                .or_default()
+                .insert(symbol.as_str().to_owned(), dst_state.clone());
         }
 
-        let initial_state = state_indexes
+        let initial_state = states
             .get(&machine.initial_state)
-            .copied()
-            .map(StateIndex)
+            .cloned()
             .ok_or_else(|| StateMachineDeserError::InvalidState(machine.initial_state))?;
 
-        let final_state = state_indexes
+        let final_state = states
             .get(&machine.final_state)
-            .copied()
-            .map(StateIndex)
+            .cloned()
             .ok_or_else(|| StateMachineDeserError::InvalidState(machine.final_state))?;
 
-        Ok(StateMachine { states, alphabet, initial_state, final_state })
+        Ok(StateMachine { states, alphabet: symbols, transitions, initial_state, final_state })
     }
 }
 

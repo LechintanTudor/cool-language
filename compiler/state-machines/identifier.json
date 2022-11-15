@@ -1,0 +1,56 @@
+{
+    "states": [
+        "initial",
+        "underscore-only",
+        "final"
+    ],
+    "alphabet": [
+        "_",
+        "a",
+        "1"
+    ],
+    "transitions": [
+        {
+            "src_state": "initial",
+            "symbol": "_",
+            "dst_state": "underscore-only"
+        },
+        {
+            "src_state": "initial",
+            "symbol": "a",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "underscore-only",
+            "symbol": "_",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "underscore-only",
+            "symbol": "a",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "underscore-only",
+            "symbol": "1",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "final",
+            "symbol": "_",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "final",
+            "symbol": "a",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "final",
+            "symbol": "1",
+            "dst_state": "final"
+        }
+    ],
+    "initial_state": "initial",
+    "final_state": "final"
+}
