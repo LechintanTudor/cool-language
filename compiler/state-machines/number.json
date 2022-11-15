@@ -1,0 +1,40 @@
+{
+    "states": [
+        "initial",
+        "final"
+    ],
+    "alphabet": [
+        "0",
+        "1",
+        "2"
+    ],
+    "transitions": [
+        {
+            "src_state": "initial",
+            "symbol": "1",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "initial",
+            "symbol": "2",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "final",
+            "symbol": "0",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "final",
+            "symbol": "1",
+            "dst_state": "final"
+        },
+        {
+            "src_state": "final",
+            "symbol": "2",
+            "dst_state": "final"
+        }
+    ],
+    "initial_state": "initial",
+    "final_state": "final"
+}

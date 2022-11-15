@@ -14,6 +14,10 @@ mod utils;
 
 mod state_machine;
 
+use std::io::Write;
+
+use unicode_segmentation::UnicodeSegmentation;
+
 use crate::scanner::Program;
 use crate::state_machine::StateMachine;
 
@@ -48,29 +52,88 @@ fn run_compiler(args: &[String]) {
 }
 
 fn run_state_machine(args: &[String]) {
-    let automata_path = match args.get(2) {
-        Some(automata_path) => automata_path,
+    let state_machine_path = match args.get(2) {
+        Some(state_machine_path) => state_machine_path,
         None => {
-            eprintln!("No automata file provided");
+            eprintln!("No state_machine file provided");
             std::process::exit(3);
         }
     };
 
-    let automata_string = match std::fs::read_to_string(&automata_path) {
-        Ok(automata_string) => automata_string,
+    let state_machine_string = match std::fs::read_to_string(&state_machine_path) {
+        Ok(state_machine_string) => state_machine_string,
         Err(error) => {
-            eprintln!("Failed to read automata file: {}", error);
+            eprintln!("Failed to read state_machine file: {}", error);
             std::process::exit(4);
         }
     };
 
-    let automata = match serde_json::from_str::<StateMachine>(&automata_string) {
-        Ok(automata) => automata,
+    let state_machine = match serde_json::from_str::<StateMachine>(&state_machine_string) {
+        Ok(state_machine) => state_machine,
         Err(error) => {
-            eprintln!("Failed to deserialize automata: {}", error);
+            eprintln!("Failed to deserialize state_machine: {}", error);
             std::process::exit(5);
         }
     };
+
+    let mut input = String::new();
+    let mut should_run = true;
+    
+    while should_run {
+        print!(">>> ");
+        std::io::stdout().flush().expect("Failed to flush stdout");
+
+        input.clear();
+        std::io::stdin().read_line(&mut input).expect("Failed to read from stdin");
+        let mut words = input.split_whitespace().map(str::trim);
+
+        if let Some(command) = words.next() {
+            match command {
+                "display" => {
+                    display_state_machine(&state_machine);
+                },
+                "validate" => {
+                    match words.next() {
+                        Some(sequence) => {
+                            let split_sequence = sequence.graphemes(true).collect::<Vec<_>>();
+
+                            if state_machine.is_accepted(&split_sequence) {
+                                println!("{} is accepted", sequence);
+                            } else {
+                                println!("{} is not accepted", sequence);
+                            }
+                        }
+                        None => eprintln!("No sequence provided"),
+                    }
+                },
+                "exit" => {
+                    should_run = false; 
+                },
+                unknown => {
+                    eprintln!("Unknown command: '{}'", unknown);
+                }            
+            }
+        }
+
+        println!();
+    }
+}
+
+fn display_state_machine(state_machine: &StateMachine) {
+    println!("[STATES]");
+    for state in state_machine.iter_states() {
+        println!("{}", state);
+    }
+    
+    println!("\n[ALPHABET]");
+    for symbol in state_machine.iter_symbols() {
+        println!("{}", symbol);
+    }
+    
+    println!("\n[TRANSITIONS]");
+    for (src_state, symbol, dst_state) in state_machine.iter_transitions() {
+        println!("{} ---({})--> {}", src_state, symbol, dst_state);
+    }
 }
 
 fn main() {
@@ -79,9 +142,9 @@ fn main() {
     if let Some(run_mode) = args.get(1).map(String::as_str) {
         match run_mode {
             "compile" => run_compiler(&args),
-            "automata" => run_state_machine(&args),
+            "state_machine" => run_state_machine(&args),
             unknown => {
-                eprintln!("Unknown run mode, '{}'", unknown);
+                eprintln!("Unknown run mode: '{}'", unknown);
                 std::process::exit(2);
             }
         }
