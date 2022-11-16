@@ -118,8 +118,10 @@ impl TryFrom<SerializedStateMachine> for StateMachine {
         let mut final_states = HashSet::<State>::new();
         for state in machine.final_states {
             match states.get(&state) {
-                Some(state) => { final_states.insert(state.as_str().to_owned()); },
-                None => return Err(StateMachineDeserError::InvalidState(state))        
+                Some(state) => {
+                    final_states.insert(state.as_str().to_owned());
+                }
+                None => return Err(StateMachineDeserError::InvalidState(state)),
             }
         }
 

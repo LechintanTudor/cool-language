@@ -27,7 +27,7 @@ lazy_static! {
         serde_json::from_str::<StateMachine>(&number_state_machine)
             .expect("Failed to parse number state machine file")
     };
-    
+
     /// State machine for validating identifiers.
     static ref IDENT_STATE_MACHINE: StateMachine = {
         let ident_string = std::fs::read_to_string("state-machine/identifier.json")
