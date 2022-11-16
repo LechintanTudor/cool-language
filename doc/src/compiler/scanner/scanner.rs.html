@@ -180,6 +180,7 @@
 <span id="180">180</span>
 <span id="181">181</span>
 <span id="182">182</span>
+<span id="183">183</span>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::scanner::{LexicalError, Operator, ReservedWord, Separator, Token};
 <span class="kw">use </span><span class="kw">crate</span>::state_machine::StateMachine;
 <span class="kw">use </span><span class="kw">crate</span>::symbols::{Const, Symbol, SymbolTable};
@@ -199,20 +200,21 @@
     </span><span class="kw">static </span><span class="kw-2">ref </span>CHAR_LITERAL_REGEX: Regex = Regex::new(<span class="string">r&quot;^&#39;([_a-zA-Z0-9])&#39;$&quot;</span>).unwrap();
 
     <span class="doccomment">/// Matches identifiers that start with underscores or ascii letters.
-    </span><span class="kw">static </span><span class="kw-2">ref </span>IDENT_REGEX: Regex = Regex::new(<span class="string">r&quot;(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)&quot;</span>).unwrap();
+    </span><span class="kw">static </span><span class="kw-2">ref </span>IDENT_REGEX: Regex
+        = Regex::new(<span class="string">r&quot;(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)&quot;</span>).unwrap();
 
     <span class="doccomment">/// State machine for validating numeric literals
     </span><span class="kw">static </span><span class="kw-2">ref </span>NUMBER_STATE_MACHINE: StateMachine = {
-        <span class="kw">let </span>number_state_machine = std::fs::read_to_string(<span class="string">&quot;state-machine/number.json&quot;</span>)
+        <span class="kw">let </span>number_state_machine = std::fs::read_to_string(<span class="string">&quot;state-machines/number.json&quot;</span>)
             .expect(<span class="string">&quot;Failed to read number state machine file&quot;</span>);
 
         serde_json::from_str::&lt;StateMachine&gt;(<span class="kw-2">&amp;</span>number_state_machine)
             .expect(<span class="string">&quot;Failed to parse number state machine file&quot;</span>)
     };
-    
+
     <span class="doccomment">/// State machine for validating identifiers.
     </span><span class="kw">static </span><span class="kw-2">ref </span>IDENT_STATE_MACHINE: StateMachine = {
-        <span class="kw">let </span>ident_string = std::fs::read_to_string(<span class="string">&quot;state-machine/identifier.json&quot;</span>)
+        <span class="kw">let </span>ident_string = std::fs::read_to_string(<span class="string">&quot;state-machines/identifier.json&quot;</span>)
             .expect(<span class="string">&quot;Failed to read identifier state machine file&quot;</span>);
 
         serde_json::from_str::&lt;StateMachine&gt;(<span class="kw-2">&amp;</span>ident_string)

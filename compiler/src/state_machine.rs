@@ -18,7 +18,7 @@ pub struct StateMachine {
     /// All symbols that make up the state machine alphabet.
     alphabet: HashSet<SymbolArc>,
     /// All transitions supported by the state machine.
-    transitions: HashMap<State, HashMap<String, StateArc>>,
+    transitions: HashMap<State, HashMap<Symbol, StateArc>>,
     /// The initial state of the state machie.
     initial_state: StateArc,
     /// The final state of the state machine.

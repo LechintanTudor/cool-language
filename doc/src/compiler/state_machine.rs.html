@@ -162,6 +162,8 @@
 <span id="162">162</span>
 <span id="163">163</span>
 <span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
 </pre><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>std::collections::{HashMap, HashSet};
 <span class="kw">use </span>std::error::Error;
@@ -182,7 +184,7 @@
     <span class="doccomment">/// All symbols that make up the state machine alphabet.
     </span>alphabet: HashSet&lt;SymbolArc&gt;,
     <span class="doccomment">/// All transitions supported by the state machine.
-    </span>transitions: HashMap&lt;State, HashMap&lt;String, StateArc&gt;&gt;,
+    </span>transitions: HashMap&lt;State, HashMap&lt;Symbol, StateArc&gt;&gt;,
     <span class="doccomment">/// The initial state of the state machie.
     </span>initial_state: StateArc,
     <span class="doccomment">/// The final state of the state machine.
@@ -282,8 +284,10 @@
         <span class="kw">let </span><span class="kw-2">mut </span>final_states = HashSet::&lt;State&gt;::new();
         <span class="kw">for </span>state <span class="kw">in </span>machine.final_states {
             <span class="kw">match </span>states.get(<span class="kw-2">&amp;</span>state) {
-                <span class="prelude-val">Some</span>(state) =&gt; { final_states.insert(state.as_str().to_owned()); },
-                <span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(StateMachineDeserError::InvalidState(state))        
+                <span class="prelude-val">Some</span>(state) =&gt; {
+                    final_states.insert(state.as_str().to_owned());
+                }
+                <span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(StateMachineDeserError::InvalidState(state)),
             }
         }
 
