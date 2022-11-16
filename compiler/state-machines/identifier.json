@@ -52,5 +52,7 @@
         }
     ],
     "initial_state": "initial",
-    "final_state": "final"
+    "final_states": [
+        "final"
+    ]
 }

@@ -12,14 +12,13 @@ mod symbols;
 /// Various utility functions.
 mod utils;
 
+/// State machine implementation.
 mod state_machine;
-
-use std::io::Write;
-
-use unicode_segmentation::UnicodeSegmentation;
 
 use crate::scanner::Program;
 use crate::state_machine::StateMachine;
+use std::io::Write;
+use unicode_segmentation::UnicodeSegmentation;
 
 fn run_compiler(args: &[String]) {
     let source_path = match args.get(2) {
@@ -78,7 +77,7 @@ fn run_state_machine(args: &[String]) {
 
     let mut input = String::new();
     let mut should_run = true;
-    
+
     while should_run {
         print!(">>> ");
         std::io::stdout().flush().expect("Failed to flush stdout");
@@ -91,27 +90,25 @@ fn run_state_machine(args: &[String]) {
             match command {
                 "display" => {
                     display_state_machine(&state_machine);
-                },
-                "validate" => {
-                    match words.next() {
-                        Some(sequence) => {
-                            let split_sequence = sequence.graphemes(true).collect::<Vec<_>>();
+                }
+                "validate" => match words.next() {
+                    Some(sequence) => {
+                        let split_sequence = sequence.graphemes(true).collect::<Vec<_>>();
 
-                            if state_machine.is_accepted(&split_sequence) {
-                                println!("{} is accepted", sequence);
-                            } else {
-                                println!("{} is not accepted", sequence);
-                            }
+                        if state_machine.is_accepted(&split_sequence) {
+                            println!("{} is accepted", sequence);
+                        } else {
+                            println!("{} is not accepted", sequence);
                         }
-                        None => eprintln!("No sequence provided"),
                     }
+                    None => eprintln!("No sequence provided"),
                 },
                 "exit" => {
-                    should_run = false; 
-                },
+                    should_run = false;
+                }
                 unknown => {
                     eprintln!("Unknown command: '{}'", unknown);
-                }            
+                }
             }
         }
 
@@ -124,15 +121,23 @@ fn display_state_machine(state_machine: &StateMachine) {
     for state in state_machine.iter_states() {
         println!("{}", state);
     }
-    
+
     println!("\n[ALPHABET]");
     for symbol in state_machine.iter_symbols() {
         println!("{}", symbol);
     }
-    
+
     println!("\n[TRANSITIONS]");
     for (src_state, symbol, dst_state) in state_machine.iter_transitions() {
         println!("{} ---({})--> {}", src_state, symbol, dst_state);
+    }
+
+    println!("\n[INITIAL STATE]");
+    println!("{}", state_machine.initial_state());
+
+    println!("\n[FINAL STATES]");
+    for final_state in state_machine.final_states() {
+        println!("{}", final_state);
     }
 }
 

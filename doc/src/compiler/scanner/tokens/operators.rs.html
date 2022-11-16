@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/scanner/tokens/operators.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>operators.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../compiler/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../compiler/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../compiler/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/scanner/tokens/operators.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>operators.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../compiler/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../compiler/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../compiler/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -230,237 +230,237 @@
 <span id="230">230</span>
 <span id="231">231</span>
 <span id="232">232</span>
-</pre><pre class="rust"><code><span class="doccomment">/// Operator defined by the &quot;cool language&quot; specification.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Operator</span> {
-    <span class="doccomment">/// Assignment operator.</span>
-    <span class="ident">Assignment</span>(<span class="ident">AssignmentOperator</span>),
-    <span class="doccomment">/// Arithmetic operator.</span>
-    <span class="ident">Arithmetic</span>(<span class="ident">ArithmeticOperator</span>),
-    <span class="doccomment">/// Relational operator.</span>
-    <span class="ident">Relational</span>(<span class="ident">RelationalOperator</span>),
-    <span class="doccomment">/// Logical operator.</span>
-    <span class="ident">Logical</span>(<span class="ident">LogicalOperator</span>),
-    <span class="doccomment">/// Bitwiser operator.</span>
-    <span class="ident">Bitwise</span>(<span class="ident">BitwiseOperator</span>),
+</pre><pre class="rust"><code><span class="doccomment">/// Operator defined by the &quot;cool language&quot; specification.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+</span><span class="kw">pub enum </span>Operator {
+    <span class="doccomment">/// Assignment operator.
+    </span>Assignment(AssignmentOperator),
+    <span class="doccomment">/// Arithmetic operator.
+    </span>Arithmetic(ArithmeticOperator),
+    <span class="doccomment">/// Relational operator.
+    </span>Relational(RelationalOperator),
+    <span class="doccomment">/// Logical operator.
+    </span>Logical(LogicalOperator),
+    <span class="doccomment">/// Bitwiser operator.
+    </span>Bitwise(BitwiseOperator),
 }
 
-<span class="kw">impl</span> <span class="ident">Operator</span> {
-    <span class="doccomment">/// Tries to parse the `input` into an operator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_parse</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">operator</span>) <span class="op">=</span> <span class="ident">AssignmentOperator::try_parse</span>(<span class="ident">input</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident"><span class="self">Self</span>::Assignment</span>(<span class="ident">operator</span>));
+<span class="kw">impl </span>Operator {
+    <span class="doccomment">/// Tries to parse the `input` into an operator.
+    </span><span class="kw">pub fn </span>try_parse(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(operator) = AssignmentOperator::try_parse(input) {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="self">Self</span>::Assignment(operator));
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">operator</span>) <span class="op">=</span> <span class="ident">ArithmeticOperator::try_parse</span>(<span class="ident">input</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident"><span class="self">Self</span>::Arithmetic</span>(<span class="ident">operator</span>));
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(operator) = ArithmeticOperator::try_parse(input) {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="self">Self</span>::Arithmetic(operator));
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">operator</span>) <span class="op">=</span> <span class="ident">RelationalOperator::try_parse</span>(<span class="ident">input</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident"><span class="self">Self</span>::Relational</span>(<span class="ident">operator</span>));
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(operator) = RelationalOperator::try_parse(input) {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="self">Self</span>::Relational(operator));
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">operator</span>) <span class="op">=</span> <span class="ident">LogicalOperator::try_parse</span>(<span class="ident">input</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident"><span class="self">Self</span>::Logical</span>(<span class="ident">operator</span>));
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(operator) = LogicalOperator::try_parse(input) {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="self">Self</span>::Logical(operator));
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">operator</span>) <span class="op">=</span> <span class="ident">BitwiseOperator::try_parse</span>(<span class="ident">input</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident"><span class="self">Self</span>::Bitwise</span>(<span class="ident">operator</span>));
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(operator) = BitwiseOperator::try_parse(input) {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="self">Self</span>::Bitwise(operator));
         }
 
-        <span class="prelude-val">None</span>
-    }
+        <span class="prelude-val">None
+    </span>}
 
-    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">needs_lookahead</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Assignment</span>(<span class="ident">operator</span>) =&gt; <span class="ident">operator</span>.<span class="ident">needs_lookahead</span>(),
-            <span class="ident"><span class="self">Self</span>::Arithmetic</span>(<span class="ident">operator</span>) =&gt; <span class="ident">operator</span>.<span class="ident">needs_lookahead</span>(),
-            <span class="ident"><span class="self">Self</span>::Relational</span>(<span class="ident">operator</span>) =&gt; <span class="ident">operator</span>.<span class="ident">needs_lookahead</span>(),
-            <span class="ident"><span class="self">Self</span>::Logical</span>(<span class="ident">operator</span>) =&gt; <span class="ident">operator</span>.<span class="ident">needs_lookahead</span>(),
-            <span class="ident"><span class="self">Self</span>::Bitwise</span>(<span class="ident">operator</span>) =&gt; <span class="ident">operator</span>.<span class="ident">needs_lookahead</span>(),
+    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.
+    </span><span class="kw">pub fn </span>needs_lookahead(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::Assignment(operator) =&gt; operator.needs_lookahead(),
+            <span class="self">Self</span>::Arithmetic(operator) =&gt; operator.needs_lookahead(),
+            <span class="self">Self</span>::Relational(operator) =&gt; operator.needs_lookahead(),
+            <span class="self">Self</span>::Logical(operator) =&gt; operator.needs_lookahead(),
+            <span class="self">Self</span>::Bitwise(operator) =&gt; operator.needs_lookahead(),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">AssignmentOperator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Operator</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">operator</span>: <span class="ident">AssignmentOperator</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Assignment</span>(<span class="ident">operator</span>)
+<span class="kw">impl </span>From&lt;AssignmentOperator&gt; <span class="kw">for </span>Operator {
+    <span class="kw">fn </span>from(operator: AssignmentOperator) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Assignment(operator)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ArithmeticOperator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Operator</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">operator</span>: <span class="ident">ArithmeticOperator</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Arithmetic</span>(<span class="ident">operator</span>)
+<span class="kw">impl </span>From&lt;ArithmeticOperator&gt; <span class="kw">for </span>Operator {
+    <span class="kw">fn </span>from(operator: ArithmeticOperator) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Arithmetic(operator)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">RelationalOperator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Operator</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">operator</span>: <span class="ident">RelationalOperator</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Relational</span>(<span class="ident">operator</span>)
+<span class="kw">impl </span>From&lt;RelationalOperator&gt; <span class="kw">for </span>Operator {
+    <span class="kw">fn </span>from(operator: RelationalOperator) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Relational(operator)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">LogicalOperator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Operator</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">operator</span>: <span class="ident">LogicalOperator</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Logical</span>(<span class="ident">operator</span>)
+<span class="kw">impl </span>From&lt;LogicalOperator&gt; <span class="kw">for </span>Operator {
+    <span class="kw">fn </span>from(operator: LogicalOperator) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Logical(operator)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BitwiseOperator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Operator</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">operator</span>: <span class="ident">BitwiseOperator</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::Bitwise</span>(<span class="ident">operator</span>)
+<span class="kw">impl </span>From&lt;BitwiseOperator&gt; <span class="kw">for </span>Operator {
+    <span class="kw">fn </span>from(operator: BitwiseOperator) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Bitwise(operator)
     }
 }
 
-<span class="doccomment">/// Assignment operator defined by the &quot;cool language&quot; specification.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AssignmentOperator</span>;
+<span class="doccomment">/// Assignment operator defined by the &quot;cool language&quot; specification.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+</span><span class="kw">pub struct </span>AssignmentOperator;
 
-<span class="kw">impl</span> <span class="ident">AssignmentOperator</span> {
-    <span class="doccomment">/// Tries to parse the `input` into an assignment operator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_parse</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">input</span> {
-            <span class="string">&quot;=&quot;</span> =&gt; <span class="self">Self</span>,
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+<span class="kw">impl </span>AssignmentOperator {
+    <span class="doccomment">/// Tries to parse the `input` into an assignment operator.
+    </span><span class="kw">pub fn </span>try_parse(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw">match </span>input {
+            <span class="string">&quot;=&quot; </span>=&gt; <span class="self">Self</span>,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
         })
     }
 
-    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">needs_lookahead</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="comment">// = -&gt; ==</span>
-        <span class="bool-val">true</span>
-    }
+    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.
+    </span><span class="kw">pub fn </span>needs_lookahead(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="comment">// = -&gt; ==
+        </span><span class="bool-val">true
+    </span>}
 }
 
-<span class="doccomment">/// Arithmetic operator defined by the &quot;cool language&quot; specification.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ArithmeticOperator</span> {
-    <span class="doccomment">/// Addition operator.</span>
-    <span class="ident">Addition</span>,
-    <span class="doccomment">/// Subtraction operator.</span>
-    <span class="ident">Subtraction</span>,
-    <span class="doccomment">/// Multiplication operator.</span>
-    <span class="ident">Multiplication</span>,
-    <span class="doccomment">/// Division operator.</span>
-    <span class="ident">Division</span>,
-    <span class="doccomment">/// Remainder operator.</span>
-    <span class="ident">Remainder</span>,
+<span class="doccomment">/// Arithmetic operator defined by the &quot;cool language&quot; specification.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+</span><span class="kw">pub enum </span>ArithmeticOperator {
+    <span class="doccomment">/// Addition operator.
+    </span>Addition,
+    <span class="doccomment">/// Subtraction operator.
+    </span>Subtraction,
+    <span class="doccomment">/// Multiplication operator.
+    </span>Multiplication,
+    <span class="doccomment">/// Division operator.
+    </span>Division,
+    <span class="doccomment">/// Remainder operator.
+    </span>Remainder,
 }
 
-<span class="kw">impl</span> <span class="ident">ArithmeticOperator</span> {
-    <span class="doccomment">/// Tries to parse the `input` into an arithmetic operator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_parse</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">input</span> {
-            <span class="string">&quot;+&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Addition</span>,
-            <span class="string">&quot;-&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Subtraction</span>,
-            <span class="string">&quot;*&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Multiplication</span>,
-            <span class="string">&quot;/&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Division</span>,
-            <span class="string">&quot;%&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Remainder</span>,
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+<span class="kw">impl </span>ArithmeticOperator {
+    <span class="doccomment">/// Tries to parse the `input` into an arithmetic operator.
+    </span><span class="kw">pub fn </span>try_parse(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw">match </span>input {
+            <span class="string">&quot;+&quot; </span>=&gt; <span class="self">Self</span>::Addition,
+            <span class="string">&quot;-&quot; </span>=&gt; <span class="self">Self</span>::Subtraction,
+            <span class="string">&quot;*&quot; </span>=&gt; <span class="self">Self</span>::Multiplication,
+            <span class="string">&quot;/&quot; </span>=&gt; <span class="self">Self</span>::Division,
+            <span class="string">&quot;%&quot; </span>=&gt; <span class="self">Self</span>::Remainder,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
         })
     }
 
-    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">needs_lookahead</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="bool-val">false</span>
-    }
+    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.
+    </span><span class="kw">pub fn </span>needs_lookahead(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="bool-val">false
+    </span>}
 }
 
-<span class="doccomment">/// Relational operator defined by the &quot;cool language&quot; specification.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">RelationalOperator</span> {
-    <span class="doccomment">/// Equal operator.</span>
-    <span class="ident">Equal</span>,
-    <span class="doccomment">/// Not equal operator.</span>
-    <span class="ident">NotEqual</span>,
-    <span class="doccomment">/// Less than operator.</span>
-    <span class="ident">Less</span>,
-    <span class="doccomment">/// Less than or equal operator.</span>
-    <span class="ident">LessOrEqual</span>,
-    <span class="doccomment">/// Greater than operator.</span>
-    <span class="ident">Greater</span>,
-    <span class="doccomment">/// Greater than or equal operator.</span>
-    <span class="ident">GreaterOrEqual</span>,
+<span class="doccomment">/// Relational operator defined by the &quot;cool language&quot; specification.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+</span><span class="kw">pub enum </span>RelationalOperator {
+    <span class="doccomment">/// Equal operator.
+    </span>Equal,
+    <span class="doccomment">/// Not equal operator.
+    </span>NotEqual,
+    <span class="doccomment">/// Less than operator.
+    </span>Less,
+    <span class="doccomment">/// Less than or equal operator.
+    </span>LessOrEqual,
+    <span class="doccomment">/// Greater than operator.
+    </span>Greater,
+    <span class="doccomment">/// Greater than or equal operator.
+    </span>GreaterOrEqual,
 }
 
-<span class="kw">impl</span> <span class="ident">RelationalOperator</span> {
-    <span class="doccomment">/// Tries to parse the `input` into a relational operator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_parse</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">input</span> {
-            <span class="string">&quot;==&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Equal</span>,
-            <span class="string">&quot;!=&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::NotEqual</span>,
-            <span class="string">&quot;&lt;&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Less</span>,
-            <span class="string">&quot;&lt;=&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::LessOrEqual</span>,
-            <span class="string">&quot;&gt;&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Greater</span>,
-            <span class="string">&quot;&gt;=&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::GreaterOrEqual</span>,
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+<span class="kw">impl </span>RelationalOperator {
+    <span class="doccomment">/// Tries to parse the `input` into a relational operator.
+    </span><span class="kw">pub fn </span>try_parse(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw">match </span>input {
+            <span class="string">&quot;==&quot; </span>=&gt; <span class="self">Self</span>::Equal,
+            <span class="string">&quot;!=&quot; </span>=&gt; <span class="self">Self</span>::NotEqual,
+            <span class="string">&quot;&lt;&quot; </span>=&gt; <span class="self">Self</span>::Less,
+            <span class="string">&quot;&lt;=&quot; </span>=&gt; <span class="self">Self</span>::LessOrEqual,
+            <span class="string">&quot;&gt;&quot; </span>=&gt; <span class="self">Self</span>::Greater,
+            <span class="string">&quot;&gt;=&quot; </span>=&gt; <span class="self">Self</span>::GreaterOrEqual,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
         })
     }
 
-    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">needs_lookahead</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="comment">// &lt; -&gt; &lt;=, &gt; -&gt; &gt;=</span>
-        [<span class="ident"><span class="self">Self</span>::Less</span>, <span class="ident"><span class="self">Self</span>::Greater</span>].<span class="ident">contains</span>(<span class="self">self</span>)
+    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.
+    </span><span class="kw">pub fn </span>needs_lookahead(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="comment">// &lt; -&gt; &lt;=, &gt; -&gt; &gt;=
+        </span>[<span class="self">Self</span>::Less, <span class="self">Self</span>::Greater].contains(<span class="self">self</span>)
     }
 }
 
-<span class="doccomment">/// Logical operator defined by the &quot;cool language&quot; specification.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">LogicalOperator</span> {
-    <span class="doccomment">/// And operator.</span>
-    <span class="ident">And</span>,
-    <span class="doccomment">/// Or operator.</span>
-    <span class="ident">Or</span>,
-    <span class="doccomment">/// Not operator.</span>
-    <span class="ident">Not</span>,
+<span class="doccomment">/// Logical operator defined by the &quot;cool language&quot; specification.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+</span><span class="kw">pub enum </span>LogicalOperator {
+    <span class="doccomment">/// And operator.
+    </span>And,
+    <span class="doccomment">/// Or operator.
+    </span>Or,
+    <span class="doccomment">/// Not operator.
+    </span>Not,
 }
 
-<span class="kw">impl</span> <span class="ident">LogicalOperator</span> {
-    <span class="doccomment">/// Tries to parse the `input` into a logical operator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_parse</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">input</span> {
-            <span class="string">&quot;&amp;&amp;&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::And</span>,
-            <span class="string">&quot;||&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Or</span>,
-            <span class="string">&quot;!&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Not</span>,
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+<span class="kw">impl </span>LogicalOperator {
+    <span class="doccomment">/// Tries to parse the `input` into a logical operator.
+    </span><span class="kw">pub fn </span>try_parse(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw">match </span>input {
+            <span class="string">&quot;&amp;&amp;&quot; </span>=&gt; <span class="self">Self</span>::And,
+            <span class="string">&quot;||&quot; </span>=&gt; <span class="self">Self</span>::Or,
+            <span class="string">&quot;!&quot; </span>=&gt; <span class="self">Self</span>::Not,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
         })
     }
 
-    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">needs_lookahead</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="comment">// ! -&gt; !=</span>
-        [<span class="ident"><span class="self">Self</span>::Not</span>].<span class="ident">contains</span>(<span class="self">self</span>)
+    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.
+    </span><span class="kw">pub fn </span>needs_lookahead(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="comment">// ! -&gt; !=
+        </span>[<span class="self">Self</span>::Not].contains(<span class="self">self</span>)
     }
 }
 
-<span class="doccomment">/// Bitwise operator defined by the &quot;cool language&quot; specification.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BitwiseOperator</span> {
-    <span class="doccomment">/// Bitwise and operator.</span>
-    <span class="ident">And</span>,
-    <span class="doccomment">/// Bitwise or operator.</span>
-    <span class="ident">Or</span>,
-    <span class="doccomment">/// Bitwise not operator.</span>
-    <span class="ident">Not</span>,
+<span class="doccomment">/// Bitwise operator defined by the &quot;cool language&quot; specification.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+</span><span class="kw">pub enum </span>BitwiseOperator {
+    <span class="doccomment">/// Bitwise and operator.
+    </span>And,
+    <span class="doccomment">/// Bitwise or operator.
+    </span>Or,
+    <span class="doccomment">/// Bitwise not operator.
+    </span>Not,
 }
 
-<span class="kw">impl</span> <span class="ident">BitwiseOperator</span> {
-    <span class="doccomment">/// Tries to parse the `input` into a bitwise operator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_parse</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">input</span> {
-            <span class="string">&quot;&amp;&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::And</span>,
-            <span class="string">&quot;|&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Or</span>,
-            <span class="string">&quot;^&quot;</span> =&gt; <span class="ident"><span class="self">Self</span>::Not</span>,
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+<span class="kw">impl </span>BitwiseOperator {
+    <span class="doccomment">/// Tries to parse the `input` into a bitwise operator.
+    </span><span class="kw">pub fn </span>try_parse(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw">match </span>input {
+            <span class="string">&quot;&amp;&quot; </span>=&gt; <span class="self">Self</span>::And,
+            <span class="string">&quot;|&quot; </span>=&gt; <span class="self">Self</span>::Or,
+            <span class="string">&quot;^&quot; </span>=&gt; <span class="self">Self</span>::Not,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
         })
     }
 
-    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">needs_lookahead</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="comment">// &amp; -&gt; &amp;&amp;, | -&gt; ||</span>
-        [<span class="ident"><span class="self">Self</span>::And</span>, <span class="ident"><span class="self">Self</span>::Or</span>].<span class="ident">contains</span>(<span class="self">self</span>)
+    <span class="doccomment">/// Returns `true` if the scanner needs to look ahead to determine the correct operator type.
+    </span><span class="kw">pub fn </span>needs_lookahead(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="comment">// &amp; -&gt; &amp;&amp;, | -&gt; ||
+        </span>[<span class="self">Self</span>::And, <span class="self">Self</span>::Or].contains(<span class="self">self</span>)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="compiler" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="compiler" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

@@ -1,5 +1,7 @@
 use crate::scanner::{LexicalError, Operator, ReservedWord, Separator, Token};
+use crate::state_machine::StateMachine;
 use crate::symbols::{Const, Symbol, SymbolTable};
+use crate::utils;
 use lazy_static::lazy_static;
 use regex::Regex;
 use unicode_segmentation::UnicodeSegmentation;
@@ -16,6 +18,24 @@ lazy_static! {
 
     /// Matches identifiers that start with underscores or ascii letters.
     static ref IDENT_REGEX: Regex = Regex::new(r"(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)").unwrap();
+
+    /// State machine for validating numeric literals
+    static ref NUMBER_STATE_MACHINE: StateMachine = {
+        let number_state_machine = std::fs::read_to_string("state-machine/number.json")
+            .expect("Failed to read number state machine file");
+
+        serde_json::from_str::<StateMachine>(&number_state_machine)
+            .expect("Failed to parse number state machine file")
+    };
+    
+    /// State machine for validating identifiers.
+    static ref IDENT_STATE_MACHINE: StateMachine = {
+        let ident_string = std::fs::read_to_string("state-machine/identifier.json")
+            .expect("Failed to read identifier state machine file");
+
+        serde_json::from_str::<StateMachine>(&ident_string)
+            .expect("Failed to parse identifier state machine file")
+    };
 }
 
 /// Source file split into its tokens, identifiers and constants.
@@ -46,7 +66,9 @@ impl Program {
             if let Some(reserved_word) = ReservedWord::try_parse(word) {
                 program.tokens.push(reserved_word.into());
             } else if !word.is_empty() {
-                if NUMBER_LITERAL_REGEX.is_match(word) {
+                let sequence = utils::str_to_grapheme_clusters(word);
+
+                if NUMBER_STATE_MACHINE.is_accepted(&sequence) {
                     let number = parse_i32(word);
                     let number_id = program.consts.insert(Const::I32(number).into());
                     program.tokens.push(Token::Literal(number_id));
@@ -62,7 +84,7 @@ impl Program {
                     let char_literal = char_literal.as_str().chars().next().unwrap_or('\0');
                     let char_literal_id = program.consts.insert(Const::Char(char_literal).into());
                     program.tokens.push(Token::Literal(char_literal_id));
-                } else if IDENT_REGEX.is_match(word) {
+                } else if IDENT_STATE_MACHINE.is_accepted(&sequence) {
                     let ident_id = program.idents.insert(Symbol::Ident(word.clone()));
                     program.tokens.push(Token::Ident(ident_id));
                 } else {

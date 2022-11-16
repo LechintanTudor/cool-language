@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["aho_corasick","compiler","lazy_static","memchr","regex","regex_syntax","unicode_segmentation"];
+window.ALL_CRATES = ["aho_corasick","compiler","itoa","lazy_static","memchr","proc_macro2","quote","regex","regex_syntax","ryu","serde","serde_derive","serde_json","syn","unicode_ident","unicode_segmentation"];

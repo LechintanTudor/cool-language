@@ -1,3 +1,5 @@
+use unicode_segmentation::UnicodeSegmentation;
+
 /// Hashes the given string.
 pub fn hash_str(value: &str) -> u64 {
     value.chars().fold(7_u64, |hash, c| hash.wrapping_mul(31).wrapping_add(u64::from(c)))
@@ -35,6 +37,10 @@ pub fn next_prime(n: usize) -> usize {
     }
 
     panic!("Prime number does not fit u64");
+}
+
+pub fn str_to_grapheme_clusters(input: &str) -> Vec<&str> {
+    input.graphemes(true).collect::<Vec<_>>()
 }
 
 #[cfg(test)]
