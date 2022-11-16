@@ -17,11 +17,12 @@ lazy_static! {
     static ref CHAR_LITERAL_REGEX: Regex = Regex::new(r"^'([_a-zA-Z0-9])'$").unwrap();
 
     /// Matches identifiers that start with underscores or ascii letters.
-    static ref IDENT_REGEX: Regex = Regex::new(r"(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)").unwrap();
+    static ref IDENT_REGEX: Regex
+        = Regex::new(r"(^(_[_a-zA-Z0-9]+)$|^(([a-zA-Z])[_a-zA-Z0-9]*)$)").unwrap();
 
     /// State machine for validating numeric literals
     static ref NUMBER_STATE_MACHINE: StateMachine = {
-        let number_state_machine = std::fs::read_to_string("state-machine/number.json")
+        let number_state_machine = std::fs::read_to_string("state-machines/number.json")
             .expect("Failed to read number state machine file");
 
         serde_json::from_str::<StateMachine>(&number_state_machine)
@@ -30,7 +31,7 @@ lazy_static! {
 
     /// State machine for validating identifiers.
     static ref IDENT_STATE_MACHINE: StateMachine = {
-        let ident_string = std::fs::read_to_string("state-machine/identifier.json")
+        let ident_string = std::fs::read_to_string("state-machines/identifier.json")
             .expect("Failed to read identifier state machine file");
 
         serde_json::from_str::<StateMachine>(&ident_string)
